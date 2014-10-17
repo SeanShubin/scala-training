@@ -1,0 +1,51 @@
+go over outline.txt (this document)
+
+play with Scala Read Evaluate Print Loop
+
+go over the basics
+    core/src/test/scala/com/seanshubin/scala/training/basics
+        trait/class/object
+        explain constructors
+        TuplesAndExtractorsSuite
+        OptionSuite
+        CaseClassSuite
+        CollectionSuite
+        RegexExtractorSuite
+        TypesOfLoops (skim this at first, can go into more detail if time)
+
+go over requirements.txt
+
+//cj/scala-training/00-search/implemented/
+    Start with a sample working implementation
+        mvn package
+        ./prod-run.sh
+        http://localhost:15000/search?query=red+scarf
+    If this does not work, it is something with the environment rather than the code
+
+//cj/scala-training/00-search/baseline/
+    Implementations have been removed
+    The tests in com.seanshubin.scala.training.basics show you how to do most of what you will need
+    Refer to //cj/scala-training/00-search/implemented/ if you get stuck
+    If you look at implementations, be sure you understand them
+        ask if you don't understand
+        don't cut/paste
+        don't memorize
+
+//cj/scala-training/01-option/baseline/
+    Same as //cj/scala-training/00-search/implemented/, but the file format has changed
+    You will have to make color optional
+    Use the Option type rather than null
+    Refer to the //cj/scala-training/01-option/implemented/ if you get stuck
+    But be sure you understand what you are seeing
+        ask if you don't understand
+        don't cut/paste
+        don't memorize
+
+//cj/scala-training/01-option/implemented/
+    Final working implementation
+        mvn package
+        ./prod-run.sh
+        http://localhost:15000/search?query=red+scarf
+        http://localhost:15000/search?query=scarf
+
+go over how-to-benefit-from-scala.txt

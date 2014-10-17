@@ -1,0 +1,154 @@
+Getting the most out of Scala
+    In Scala, you can still program the same way as you do in Java with Scala's more concise syntax, but if you really want to benefit from the things Scala is good at, try out these guidelines.
+
+    Don't pass around null values in Scala, use the Option type instead.  Treat null pointer exceptions in Scala as the caller's fault for sending a null, not the functions fault for not checking for null.  Sometimes you will have to deal with nulls, just don't pass them along in a parameter list.
+        sometimes you will have to deal with nulls in java
+        if the value is null *only* during initialization, but *never* once the application is ready, then an option is unnecessary overhead
+        don't use Option.get, if you do, you end up with all the same problems as nulls
+
+    Scala's List does not correspond to Java's List.  In Scala, what you probably want is a Seq.
+
+    Don't all-caps your constants.  It makes sense in java because in java something being constant is not the default.
+
+    When looping over a collection, move your single-element operation into a separate method and use map or foreach as appropriate
+
+    Break lines so it is obvious that another operation is expected, for example
+    instead of
+        val x = 1 + 2
+            + 3 + 4
+    do
+        val x = 1 + 2 +
+            3 + 4
+
+    Favor functional and declarative styles over side-effecting and imperative styles
+    Here are some things to watch out for
+        var                          (use val or lazy val instead)
+        for without a yield          (this means there is a side effect in the for, return a new list instead)
+        while loop                   (the loop control variable will be mutable, and the loop will be side effecting, use a fold or tail recursion instead)
+        foreach                      (will be side effecting, use map() to return a new list instead)
+        buffer                       (use a list comprehension such as map() or flatMap() instead)
+        mutable collection           (combine immutable collections with list comprehensions, fold, and/or tail recursion)
+        mutable object               (create an immutable object and methods to transform into the same type of immutable object)
+        defensive copy of collection (don't need this if you are using a immutable collections)
+
+    Hide these types of things behind an interface (a trait with no implementations), separate from functional/declarative code
+        random
+        system clock
+        local time zone
+        environment variable
+        network
+        filesystem
+        database
+        default character encoding
+        default newline separator
+        default file separator
+
+    Don't try to make side-effecting and imperative styles 'look' functional or declarative.
+    For example, don't use a .map() if you are side effecting, use a .foreach() to make what you are actually doing more obvious.
+
+Understand your evaluation options
+    val
+        computed only once, immediately upon declaration, immutable
+    lazy val
+        computed only once, when accessed, immutable
+    var
+        computed immediately upon declaration, mutable
+    def
+        computed every time it is accessed
+
+    by value parameters (theParameter:String)
+        computed exactly once, as the function is called
+    by name parameters (theParameter: => String)
+        computed only when referenced, and every time it is referenced
+
+Commonly used classes in the collection hierarchy
+    Traversable        - can be iterated over all at once, gives you the vast majority of collection operations by only implementing one function (foreach)
+    Iterable           - can be iterated over one at a time
+        Seq            - ordered sequence, you should use this most of the time
+            IndexedSeq - performs well with random access
+            List       - performs well with head, tail, isEmpty (ideal for many recursive algorithms)
+            Range      - expresses a range of values in terms of start, end, and step
+            Stream     - a lazy sequence, computes all elements up to and including the one you ask for only when you ask for it, and does not recompute already computed values when you ask for more values
+        Set            - unique values
+        Map            - key value pairs, can also be thought of as a Seq of tuple2's
+
+Advantages of scala
+    Concise
+        case classes
+        list comprehensions
+        first class functions, closures
+    Transition to functional
+        can do everything in java imperative style with scala syntax
+        can introduce functional concepts incrementally
+    Take advantage of multiple cores
+        scala makes it easy to avoid mutable state
+        this is important for code to be parallelizable
+
+Be aware of your learning resources
+    Scala for the Impatient, by Cay S. Horstmann
+    http://twitter.github.com/effectivescala/
+    http://www.scalakoans.org/
+    https://www.coursera.org/course/progfun
+
+Understand what functional programming really means
+
+    what is functional?
+        definition of a function
+            "In mathematics, a function is a relation between a set of inputs and a set of permissible outputs with the property that each input is related to exactly one output."
+        definition of functional programming
+            "In computer science, functional programming is a programming paradigm that treats computation as the evaluation of mathematical functions and avoids state and mutable data."
+        definition of referential transparency
+            "An expression is said to be referentially transparent if it can be replaced with its value without changing the behavior of a program"
+        how to tell if one decision is more or less 'functional' than another?
+            Sean proposes guidelines
+                Something is "more" functional if it
+                (1) does a better job separating referentially transparent code
+                (2) relies more on referentially transparent code
+
+    pure (referential transparency)
+        all inputs are specified in the parameter list section of the signature
+        all outputs are specified in return value section of the signature
+        inputs and outputs are immutable
+            (caveat: immutable after first assignment is sufficient)
+        there are no side effects (that is, the function does nothing else but transform the inputs into the outputs)
+
+    impure (does not have referential transparency)
+        outputs not specified in signature
+            mutate state (was one thing, now another)
+            throw exception
+            void/null/unit return value
+        inputs not specified in signature (global variables)
+            mutable parameter
+            global variable
+            system clock
+            environment variables
+            random
+        inputs or outputs not specified in signature
+            network call
+            file system (including logging)
+            console
+
+Check out this book
+    Concepts, Techniques, and Models of Computer Programming
+    by Peter Van Roy and Seif Haridi
+
+    In particular, they had an interesting phrasing on the "simplest thing that could possibly work"
+    Shown below as the "Rule of least expressiveness"
+    From context, the 'natural' model is the one where
+        a less expressive model would take more work because of the models limitations with regards to what you are modeling
+        a more expressive model is not needed because it would not add anything
+
+    From page 323
+        Rule of least expressiveness
+            When programming a component, the right computation
+            model for the component is the least expressive model
+            that results in a natural program
+
+        Models of Computer Programming
+            Declarative sequential model
+            Declarative concurrent model
+            Declarative model with exceptions
+            Message passing concurrent model
+            Stateful model
+            Shared state concurrent model
+            Relational model

@@ -1,0 +1,22 @@
+given
+    a file containing product information
+when
+    the http server is launched
+then
+    we can perform http queries regarding the product information
+
+constraints
+    can't change the input file format (but we can do whatever we want with it internally)
+    http server must only use the product information as it existed when the http server was launched
+    http server must not start if it does not understand anything in the product file
+    user will input a single phrase into the chrome address bar as follows
+        http://localhost:15000/search?query=red shoes
+    user will expect line delimited skus in UTF-8 plain text
+
+service level
+    will never need to support more than 1000 products
+    no search should take more than a second
+
+features
+    search (can search by color and name) 
+    option (sometimes color is missing) 

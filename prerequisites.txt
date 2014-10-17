@@ -1,0 +1,70 @@
+Hands on Scala training
+
+I will be giving 4 training sessions on Scala, 2 in Westlake, 1 in Santa Barbara, and one in Westwood.
+Each training session is 4 hours long, however, if more time is allocated we can go into more detail.
+I will be scheduling a time for each of these soon, but feel free to send me a schedule that works for you.
+The room we meet in will need a good projector setup.
+
+Westlake
+    NaN
+    xChangeAgents
+
+Westlake
+    Axiomatic
+    The Show
+    Q
+
+Santa Barbara
+    Agitators
+    Team Erik
+
+Westwood
+    Electric Boogaloo
+
+
+There are 4 prerequisites, the first one is most important, the others would be nice
+
+(prerequisite 1) Make sure you can run the scala training project from maven
+    checkout the code at
+        //cj/scala-training
+
+    make sure you can run the tests and create the executable jar file
+        cd 00-search/implemented
+        mvn package
+
+    run the smoke test
+        ./prod-run.sh
+
+    this will start a webserver, the last line of the output should be
+        SUCCESS: make sure we can search for an item by color and name
+
+    open up chrome and navigate to
+        http://localhost:15000/search?query=black%20shirt
+    make sure you have a list of skus
+
+backup plan
+    try to get at least this far, let me know what problems you are having and I can try to help
+    otherwise it will slow down the training
+
+(prerequisite 2) Set up the scala-training project in your favorite integrated development environment
+    use the maven project at //cj/scala-training/00-search/baseline/pom.xml
+    run the tests in module "core"
+    the tests in "basics" should succeed, the others will fail, this is your starting point
+backup plan
+    there is always vi
+
+(prerequisite 3) Install latest scala (2.10.1 last time I checked) from http://www.scala-lang.org
+add scala-2.10.1/bin to your path
+you should be able to type 'scala' at the command line and get something like this:
+    Welcome to Scala version 2.10.1 (Java HotSpot(TM) 64-Bit Server VM, Java 1.6.0_25).
+    Type in expressions to have them evaluated.
+    Type :help for more information.
+backup plan
+    I can help you install scala during the training
+
+(prerequisite 4) Make sure your wireless works
+backup plan
+    If you managed prerequisites 1-3, you won't need your wireless
+    Hopefully there is a wired network connection somewhere in the room
+    You could pair for the interactive portions of the training
+    You could watch others do interactive portions during the training and do them yourself later

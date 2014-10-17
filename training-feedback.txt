@@ -1,0 +1,13 @@
+feedback
+    there needs to be some work done by attendees prior to the meeting
+        make sure everybody's wireless works
+        make the training scala project available ahead of time to get everyone's ide up to speed
+            have people make sure they can actually run the tests
+        have people read the 'getting most out of scala document', and be ready with questions
+    make sure room has decent projector
+    add a discussion about the collection hierarchy
+    add discussion about why we should care about functional programming?
+        take advantage of multiple cores
+        another tool for the toolbox
+        concise
+        no defensive copies
