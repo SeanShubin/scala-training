@@ -178,7 +178,7 @@ class MapFlatMapForYield extends FunSuite {
   }
 
   def verifyLines(actual: Seq[String], expectedString: String) {
-    val expected = expectedString.stripMargin.split("\n")
+    val expected = expectedString.stripMargin.split("\r\n|\r|\n")
     val compareResult = LinesCompare.compareLines(actual, expected)
     assert(compareResult.areSame, compareResult.toMultipleLineString.mkString("\n"))
   }
