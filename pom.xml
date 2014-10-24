@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin</groupId>
     <artifactId>scala-training</artifactId>
@@ -47,7 +46,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>4.3.2</version>
+                <version>4.3.3</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
