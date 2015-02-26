@@ -27,9 +27,9 @@
                 <version>2.11.5</version>
             </dependency>
             <dependency>
-                <groupId>org.eclipse.jetty.aggregate</groupId>
-                <artifactId>jetty-all</artifactId>
-                <version>9.2.8.v20150217</version>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-server</artifactId>
+                <version>9.2.9.v20150224</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
