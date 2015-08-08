@@ -3,6 +3,9 @@ package com.seanshubin.scala.training.core.basics
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Try
 
+//scala does not have enums
+//usually you don't need enums because you can have case classes and case objects extends the same trait
+//for the cases where you do need enums, here is a pattern I found useful
 sealed abstract case class Shape(name: String) {
   Shape.valuesBuffer += this
 
@@ -11,7 +14,10 @@ sealed abstract case class Shape(name: String) {
 
 object Shape {
   private val valuesBuffer = new ArrayBuffer[Shape]
+
+  //either make values lazy, or move them to the bottom of the object
   lazy val values = valuesBuffer.toSeq
+
   val Triangle = new Shape("Triangle") {}
   val Circle = new Shape("Circle") {}
   val Square = new Shape("Square") {}
