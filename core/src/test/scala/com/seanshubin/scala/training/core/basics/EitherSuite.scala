@@ -2,14 +2,11 @@ package com.seanshubin.scala.training.core.basics
 
 import org.scalatest.FunSuite
 
-import scala.collection.mutable.ArrayBuffer
-import scala.util.Try
-
 class EitherSuite extends FunSuite {
   test("stop on first validation error") {
     val sampleInputs = Seq(null, "", "aaa", "-1", "234", "50")
-    val actual = sampleInputs.map(ValidationRules.validatePartId)
-    val expected: Seq[Either[String, Int] with Product with Serializable] = Seq(
+    val actual = sampleInputs.map(ValidationRules.validateQuality)
+    val expected: Seq[Either[String, Int]] = Seq(
       Left("must not be null"),
       Left("must not be blank"),
       Left("must be a number, was 'aaa'"),
@@ -19,14 +16,17 @@ class EitherSuite extends FunSuite {
     assert(actual === expected)
   }
 
-  //  test("accumulate validation errors") {
-  //    val partUserInput = Map("id" -> "123", "name" -> "bit", "shape" -> "triangle")
-  //    case class Part(id: Long, name: String, shape: Shape)
-  //    case class PartValidator(inputs: Map[String, String], messages: Seq[String], maybeId: Option[Long], maybeName: Option[String], maybeShape: Option[Shape])
-  //    def idMustConvertToLong(partValidator: PartValidator) = {
-  //      validateId(partValidator.inputs)
-  //    }
-  //  }
+  test("accumulate validation errors") {
+    assert(
+      PartValidator.validate(Map("name" -> "bit", "shape" -> "triangle", "quality" -> "79")) ===
+        Right(Part("bit", Shape.Triangle, 79)))
+    assert(
+      PartValidator.validate(Map("name" -> "bobitty boop", "shape" -> "trapezoid", "quality" -> "wat")) ===
+        Left(Seq(
+          "name must not contain whitespace, was 'bobitty boop'",
+          "shape was 'trapezoid', but expected one of Triangle, Circle, Square",
+          "quality must be a number, was 'wat'")))
+  }
 
   object ValidationRules {
     def disallowNull(input: String): Either[String, String] = {
@@ -36,6 +36,11 @@ class EitherSuite extends FunSuite {
 
     def disallowBlank(input: String): Either[String, String] = {
       if (input.trim == "") Left("must not be blank")
+      else Right(input)
+    }
+
+    def disallowWhitespace(input: String): Either[String, String] = {
+      if (input.matches( """.*\s.*""")) Left(s"must not contain whitespace, was '$input'")
       else Right(input)
     }
 
@@ -63,7 +68,7 @@ class EitherSuite extends FunSuite {
 
     def requireAtMost100 = requireAtMost(100)
 
-    def validatePartId(input: String): Either[String, Int] = {
+    def validateQuality(input: String): Either[String, Int] = {
       for {
         a <- disallowNull(input).right
         b <- disallowBlank(a).right
@@ -74,47 +79,68 @@ class EitherSuite extends FunSuite {
         e
       }
     }
+
+    def validatePartName(input: String): Either[String, String] = {
+      for {
+        a <- disallowNull(input).right
+        b <- disallowWhitespace(a).right
+      } yield {
+        b
+      }
+    }
   }
 
-  sealed abstract case class Shape(name: String) {
-    Shape.valuesBuffer += this
+  case class Part(name: String, shape: Shape, quality: Long)
 
-    def nameMatches(nameForComparison: String): Boolean = name.equalsIgnoreCase(nameForComparison)
-  }
-
-  object Shape {
-    private val valuesBuffer = new ArrayBuffer[Shape]
-    lazy val values = valuesBuffer.toSeq
-    val Triangle = new Shape("Triangle") {}
-    val Circle = new Shape("Circle") {}
-    val Square = new Shape("Square") {}
-
-    //when it makes sense to assume an error will not happen
-    def fromString(name: String): Shape = {
-      values.find(_.nameMatches(name)).head
+  case class PartValidator(inputs: Map[String, String],
+                           messages: List[String],
+                           maybeName: Option[String],
+                           maybeShape: Option[Shape],
+                           maybeQuality: Option[Long]) {
+    def validateAll(): Either[Seq[String], Part] = {
+      val partRules = Seq(
+        validatePartName _,
+        validatePartShape _,
+        validatePartQuality _)
+      val validated = partRules.foldLeft(this)(applyPartRule)
+      val result =
+        if (validated.isValid) Right(Part(validated.maybeName.get, validated.maybeShape.get, validated.maybeQuality.get))
+        else Left(validated.messages.reverse)
+      result
     }
 
-    //when the ways an error can happen are known, and no further information about the error is needed
-    def maybeFromString(name: String): Option[Shape] = {
-      values.find(_.nameMatches(name))
+    def isValid = messages.isEmpty
+
+    def applyPartRule(soFar: PartValidator, rule: PartValidator => PartValidator): PartValidator = {
+      val newValidator = rule(soFar)
+      newValidator
     }
 
-    //when the ways an error can happen are known, and further information about the error is needed
-    def eitherFromString(name: String): Either[String, Shape] = {
-      values.find(_.nameMatches(name)) match {
-        case Some(shape) => Right(shape)
-        case None =>
-          val validNamesString = values.map(_.name).mkString(", ")
-          Left(s"Got '$name', but expected one of $validNamesString")
+    def validatePartName(partValidator: PartValidator): PartValidator = {
+      ValidationRules.validatePartName(partValidator.inputs.get("name").orNull) match {
+        case Left(message) => partValidator.copy(messages = s"name $message" :: partValidator.messages)
+        case Right(validName) => partValidator.copy(maybeName = Some(validName))
       }
     }
 
-    //when the ways an error can happen are not known, but need to be handled by the caller
-    def tryFromString(name: String): Try[Shape] = {
-      Try.apply {
-        values.find(shape => shape.nameMatches(name)).head
+    def validatePartShape(partValidator: PartValidator): PartValidator = {
+      Shape.eitherFromString(partValidator.inputs.get("shape").orNull) match {
+        case Left(message) => partValidator.copy(messages = s"shape $message" :: partValidator.messages)
+        case Right(validShape) => partValidator.copy(maybeShape = Some(validShape))
       }
     }
+
+    def validatePartQuality(partValidator: PartValidator): PartValidator = {
+      ValidationRules.validateQuality(partValidator.inputs.get("quality").orNull) match {
+        case Left(message) => partValidator.copy(messages = s"quality $message" :: partValidator.messages)
+        case Right(validId) => partValidator.copy(maybeQuality = Some(validId))
+      }
+    }
+  }
+
+  object PartValidator {
+    def validate(map: Map[String, String]): Either[Seq[String], Part] =
+      PartValidator(map, Nil, None, None, None).validateAll()
   }
 
 }
