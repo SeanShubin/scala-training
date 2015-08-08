@@ -80,7 +80,7 @@ class EitherSuite extends FunSuite {
       }
     }
 
-    def validatePartName(input: String): Either[String, String] = {
+    def validateName(input: String): Either[String, String] = {
       for {
         a <- disallowNull(input).right
         b <- disallowWhitespace(a).right
@@ -97,12 +97,8 @@ class EitherSuite extends FunSuite {
                            maybeName: Option[String],
                            maybeShape: Option[Shape],
                            maybeQuality: Option[Long]) {
-    def validateAll(): Either[Seq[String], Part] = {
-      val partRules = Seq(
-        validatePartName _,
-        validatePartShape _,
-        validatePartQuality _)
-      val validated = partRules.foldLeft(this)(applyPartRule)
+    def toValidated(): Either[Seq[String], Part] = {
+      val validated = PartValidator.validatePart(this)
       val result =
         if (validated.isValid) Right(Part(validated.maybeName.get, validated.maybeShape.get, validated.maybeQuality.get))
         else Left(validated.messages.reverse)
@@ -110,6 +106,16 @@ class EitherSuite extends FunSuite {
     }
 
     def isValid = messages.isEmpty
+  }
+
+  object PartValidator {
+
+    import ValidationRules._
+
+    def validate(map: Map[String, String]): Either[Seq[String], Part] =
+      PartValidator(map, Nil, None, None, None).toValidated()
+
+    def fromMap(map: Map[String, String]) = PartValidator(map, Nil, None, None, None)
 
     def applyPartRule(soFar: PartValidator, rule: PartValidator => PartValidator): PartValidator = {
       val newValidator = rule(soFar)
@@ -117,7 +123,7 @@ class EitherSuite extends FunSuite {
     }
 
     def validatePartName(partValidator: PartValidator): PartValidator = {
-      ValidationRules.validatePartName(partValidator.inputs.get("name").orNull) match {
+      validateName(partValidator.inputs.get("name").orNull) match {
         case Left(message) => partValidator.copy(messages = s"name $message" :: partValidator.messages)
         case Right(validName) => partValidator.copy(maybeName = Some(validName))
       }
@@ -131,16 +137,20 @@ class EitherSuite extends FunSuite {
     }
 
     def validatePartQuality(partValidator: PartValidator): PartValidator = {
-      ValidationRules.validateQuality(partValidator.inputs.get("quality").orNull) match {
+      validateQuality(partValidator.inputs.get("quality").orNull) match {
         case Left(message) => partValidator.copy(messages = s"quality $message" :: partValidator.messages)
         case Right(validId) => partValidator.copy(maybeQuality = Some(validId))
       }
     }
-  }
 
-  object PartValidator {
-    def validate(map: Map[String, String]): Either[Seq[String], Part] =
-      PartValidator(map, Nil, None, None, None).validateAll()
+    def validatePart(partValidator: PartValidator): PartValidator = {
+      val partRules = Seq(
+        validatePartName _,
+        validatePartShape _,
+        validatePartQuality _)
+      val validated = partRules.foldLeft(partValidator)(applyPartRule)
+      validated
+    }
   }
 
 }
