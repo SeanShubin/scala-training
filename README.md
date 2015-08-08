@@ -12,7 +12,7 @@ Basics
 * [composing immutable collections](core/src/test/scala/com/seanshubin/scala/training/core/basics/TypesOfLoopsSuite.scala)
 * [futures](core/src/test/scala/com/seanshubin/scala/training/core/basics/FutureSuite.scala)
 * [either](core/src/test/scala/com/seanshubin/scala/training/core/basics/EitherSuite.scala)
-* [for comprehensions, map, and flatMap](core/src/test/scala/com/seanshubin/scala/training/core/basics/OptionMapFlatMapForYieldSuite)
+* [for comprehensions, map, and flatMap](core/src/test/scala/com/seanshubin/scala/training/core/basics/OptionMapFlatMapForYieldSuite.scala)
 
 Work on the Application
 

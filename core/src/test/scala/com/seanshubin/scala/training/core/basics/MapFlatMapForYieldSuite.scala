@@ -3,7 +3,7 @@ package com.seanshubin.scala.training.core.basics
 import com.seanshubin.scala.training.core.lines.LinesCompare
 import org.scalatest.FunSuite
 
-class MapFlatMapForYield extends FunSuite {
+class MapFlatMapForYieldSuite extends FunSuite {
   test("map times 2") {
     val someNumbers = Seq(1, 2, 3, 4, 5)
     def timesTwo(x: Int) = x * 2

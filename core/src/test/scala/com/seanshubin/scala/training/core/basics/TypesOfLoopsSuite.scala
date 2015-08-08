@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 import scala.annotation.tailrec
 
 //the sample here associates colors with aliases
-class TypesOfLoops extends FunSuite {
+class TypesOfLoopsSuite extends FunSuite {
   //the input uses an outline format, with colors at the root level and aliases at the first indented level
   val colorAliasLines = Seq(
     "red",
