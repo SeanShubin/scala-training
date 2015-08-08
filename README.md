@@ -7,7 +7,7 @@ Basics
 * [options](core/src/test/scala/com/seanshubin/scala/training/core/basics/OptionSuite.scala)
 * [case classes](core/src/test/scala/com/seanshubin/scala/training/core/basics/CaseClassSuite.scala)
 * [immutable collections](core/src/test/scala/com/seanshubin/scala/training/core/basics/CollectionSuite.scala)
-* [map, flatMap, for/yield](core/src/test/scala/com/seanshubin/scala/training/core/basics/MapFlatMapForYield.scala)
+* [map, flatMap, for/yield](core/src/test/scala/com/seanshubin/scala/training/core/basics/MapFlatMapForYieldSuite.scala)
 * [regular expressions](core/src/test/scala/com/seanshubin/scala/training/core/basics/RegexExtractorSuite.scala)
 * [composing immutable collections](core/src/test/scala/com/seanshubin/scala/training/core/basics/TypesOfLoopsSuite.scala)
 * [futures](core/src/test/scala/com/seanshubin/scala/training/core/basics/FutureSuite.scala)
