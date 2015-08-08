@@ -57,7 +57,7 @@ class SearchRequestHandlerSuite extends FunSuite with EasyMockSugar with BeforeA
         |target = /unsupported
         |method = POST
         |parameters:
-        |  query = black socks""".stripMargin.replaceAll("""\r\n|\r""", "\n")
+        |  query = black socks""".stripMargin.replaceAll( """\r\n|\r""", "\n")
     val expected = SimplifiedResponse(expectedBody, "text/plain", "utf-8", HttpResponseCode.BadRequest)
 
     expecting {
@@ -86,7 +86,7 @@ class SearchRequestHandlerSuite extends FunSuite with EasyMockSugar with BeforeA
         |target = /search
         |method = GET
         |parameters:
-        |  query = black socks""".stripMargin.replaceAll("""\r\n|\r""", "\n")
+        |  query = black socks""".stripMargin.replaceAll( """\r\n|\r""", "\n")
     val expectedResponse = SimplifiedResponse(expectedBody, "text/plain", "utf-8", HttpResponseCode.InternalServerError)
 
     //have to use a fake to simulate an exception because mocks mess with the stack trace

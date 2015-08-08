@@ -3,7 +3,12 @@ package com.seanshubin.scala.training.core.basics
 import org.scalatest.FunSuite
 
 class EitherSuite extends FunSuite {
+  //a common use for Either is validation, putting a valid result on one alternative, an invalid result in the other
+  //since "right" in a different context can mean "correct", it was observed that this can be used as a mnemonic
+  //this has led to a convention of putting the valid answer on the right, and the invalid answer on the left
+  //remember, the "right" side of the either contains the "right" (correct) answer
   test("stop on first validation error") {
+    //lets validate a bunch of samples, ensuring we get the correct messages each time
     val sampleInputs = Seq(null, "", "aaa", "-1", "234", "50")
     val actual = sampleInputs.map(ValidationRules.validateQuality)
     val expected: Seq[Either[String, Int]] = Seq(
@@ -12,14 +17,16 @@ class EitherSuite extends FunSuite {
       Left("must be a number, was 'aaa'"),
       Left("must be at least 1, was -1"),
       Left("must be at most 100, was 234"),
-      Right(50))
+      Right(50)) //here the validation was successful, so we have the "right" answer, statically typed
     assert(actual === expected)
   }
 
   test("accumulate validation errors") {
+    //when everything is valid, we should get the statically typed value
     assert(
       PartValidator.validate(Map("name" -> "bit", "shape" -> "triangle", "quality" -> "79")) ===
         Right(Part("bit", Shape.Triangle, 79)))
+    //if there are validation errors, we should get the list of validation messages
     assert(
       PartValidator.validate(Map("name" -> "bobitty boop", "shape" -> "trapezoid", "quality" -> "wat")) ===
         Left(Seq(
@@ -52,6 +59,9 @@ class EitherSuite extends FunSuite {
       }
     }
 
+    //this validation rule has parameters
+    //so rather than doing the validation
+    //create a function that does the validation with the proper parameters
     def requireAtLeast(atLeast: Int): Int => Either[String, Int] =
       (input: Int) => {
         if (input < atLeast) Left(s"must be at least $atLeast, was $input")
@@ -68,7 +78,13 @@ class EitherSuite extends FunSuite {
 
     def requireAtMost100 = requireAtMost(100)
 
+    //compose a bunch of rules in order, stop on the first failure
     def validateQuality(input: String): Either[String, Int] = {
+      //if we only need to record the first failure, we can compose along the "right" projection
+      //unlike options, it is not obvious if we want to follow the left path or right path
+      //so we have to specify it in the for comprehension
+      //note that if we project right on a left, nothing happens
+      //if we project right on a right, the statically typed value is carried over
       for {
         a <- disallowNull(input).right
         b <- disallowBlank(a).right
@@ -97,7 +113,8 @@ class EitherSuite extends FunSuite {
                            maybeName: Option[String],
                            maybeShape: Option[Shape],
                            maybeQuality: Option[Long]) {
-    def toValidated(): Either[Seq[String], Part] = {
+    //compose the final validation result
+    def toValidated: Either[Seq[String], Part] = {
       val validated = PartValidator.validatePart(this)
       val result =
         if (validated.isValid) Right(Part(validated.maybeName.get, validated.maybeShape.get, validated.maybeQuality.get))
@@ -113,15 +130,17 @@ class EitherSuite extends FunSuite {
     import ValidationRules._
 
     def validate(map: Map[String, String]): Either[Seq[String], Part] =
-      PartValidator(map, Nil, None, None, None).toValidated()
+      PartValidator(map, Nil, None, None, None).toValidated
 
     def fromMap(map: Map[String, String]) = PartValidator(map, Nil, None, None, None)
 
+    //transform using the current validation rule
     def applyPartRule(soFar: PartValidator, rule: PartValidator => PartValidator): PartValidator = {
       val newValidator = rule(soFar)
       newValidator
     }
 
+    //not using Either here, because we need to collect all the messages, so can't stop on hitting a "left"
     def validatePartName(partValidator: PartValidator): PartValidator = {
       validateName(partValidator.inputs.get("name").orNull) match {
         case Left(message) => partValidator.copy(messages = s"name $message" :: partValidator.messages)
@@ -143,6 +162,7 @@ class EitherSuite extends FunSuite {
       }
     }
 
+    //run all the rules in order
     def validatePart(partValidator: PartValidator): PartValidator = {
       val partRules = Seq(
         validatePartName _,

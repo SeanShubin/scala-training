@@ -12,6 +12,8 @@ Basics
 * [regular expressions](src/test/scala/com/cj/scala/fundamentals/RegexExtractorSuite.scala)
 * [composing immutable collections](src/test/scala/com/cj/scala/fundamentals/TypesOfLoopsSuite.scala)
 * [futures](src/test/scala/com/cj/scala/fundamentals/FutureSuite.scala)
+* [either](src/test/scala/com/cj/scala/fundamentals/EitherSuite.scala)
+* [for comprehensions, map, and flatMap](src/test/scala/com/cj/scala/fundamentals/OptionMapFlatMapForYieldSuite)
 
 Work on the Application
 

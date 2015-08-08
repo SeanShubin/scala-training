@@ -106,18 +106,19 @@ class MapFlatMapForYield extends FunSuite {
   }
 
   test("for yield 1") {
-    val actual = for (
-      i <- 1 to 5; //generator
-      j <- i + 1 to 5; //generator
-      k <- j + 1 to 5; //generator
-      tuple = (i, j, k); //definition
-      sum = i + j + k; //definition
-      product = i * j * k; //definition
-      if (product != 10); //filter (skips the tuple 1,2,5)
-      if (sum != 10)) yield {
-      //filter (skips the tuple 1,4,5)
-      s"$tuple sum is $sum, product is $product"
-    }
+    val actual = for {
+      i <- 1 to 5 //generator
+      j <- i + 1 to 5 //generator
+      k <- j + 1 to 5 //generator
+      tuple = (i, j, k) //definition
+      sum = i + j + k //definition
+      product = i * j * k //definition
+      if product != 10 //filter (skips the tuple 1,2,5)
+      if sum != 10
+    } yield {
+        //filter (skips the tuple 1,4,5)
+        s"$tuple sum is $sum, product is $product"
+      }
     val expected =
       """(1,2,3) sum is 6, product is 6
         |(1,2,4) sum is 7, product is 8
@@ -139,7 +140,7 @@ class MapFlatMapForYield extends FunSuite {
   }
 
   test("for yield 3") {
-    val forResults = for (i <- 1 to 10; if (i % 2 == 1)) yield i * i
+    val forResults = for (i <- 1 to 10; if i % 2 == 1) yield i * i
     val mapResults = (1 to 10).withFilter(i => i % 2 == 1).map(i => i * i)
 
     assert(forResults === Seq(1, 9, 25, 49, 81))
@@ -147,23 +148,25 @@ class MapFlatMapForYield extends FunSuite {
   }
 
   test("for yield 4") {
-    val forResults1 = for (
-      i <- 1 to 5;
-      j <- i + 1 to 5;
-      k <- j + 1 to 5) yield {
-      (i, j, k)
-    }
+    val forResults1 = for {
+      i <- 1 to 5
+      j <- i + 1 to 5
+      k <- j + 1 to 5
+    } yield {
+        (i, j, k)
+      }
 
-    val mapResults1 = (1 to 5).flatMap(i => for (
-      j <- i + 1 to 5;
-      k <- j + 1 to 5) yield {
-      (i, j, k)
-    })
+    val mapResults1 = (1 to 5).flatMap(i => for {
+      j <- i + 1 to 5
+      k <- j + 1 to 5
+    } yield {
+        (i, j, k)
+      })
 
     val mapResults2 = (1 to 5).flatMap(i => (i + 1 to 5).flatMap(j => for (
       k <- j + 1 to 5) yield {
-      (i, j, k)
-    }))
+        (i, j, k)
+      }))
 
     val mapResults3 = (1 to 5).flatMap(i =>
       (i + 1 to 5).flatMap(j =>
