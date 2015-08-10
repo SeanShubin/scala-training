@@ -3,9 +3,10 @@ package com.seanshubin.scala.training.core.basics
 import scala.collection.mutable.ArrayBuffer
 import scala.util.Try
 
-//scala does not have enums
-//usually you don't need enums because you can have case classes and case objects extends the same trait
-//for the cases where you do need enums, here is a pattern I found useful
+//scala does not have enumerated types built in as a language construct
+//you can extend the Enumeration type if you don't need inheritance
+//you can have many case classes or case objects extend the same trait if you don't ever need to iterate over the values
+//if you need both, here is a pattern I have found useful
 sealed abstract case class Shape(name: String) {
   Shape.valuesBuffer += this
 
