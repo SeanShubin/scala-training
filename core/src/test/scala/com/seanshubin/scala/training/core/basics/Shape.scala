@@ -39,7 +39,7 @@ object Shape {
       case Some(shape) => Right(shape)
       case None =>
         val validNamesString = values.map(_.name).mkString(", ")
-        Left(s"was '$name', but expected one of $validNamesString")
+        Left(s"was '$name', expected one of $validNamesString")
     }
   }
 

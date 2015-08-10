@@ -21,6 +21,19 @@ class EitherSuite extends FunSuite {
     assert(actual === expected)
   }
 
+  //An example of how you might validate if you needed a list of all the validation errors
+  //The rules are as follows:
+  //name
+  //  must not be null
+  //  must not contain whitespace
+  //shape
+  //  must be one of Triangle, Circle, Square
+  //quality
+  //  must not be null
+  //  must not be blank
+  //  must be a number
+  //  must be at least 1
+  //  must be at most 100
   test("accumulate validation errors") {
     //when everything is valid, we should get the statically typed value
     assert(
@@ -28,10 +41,10 @@ class EitherSuite extends FunSuite {
         Right(Part("bit", Shape.Triangle, 79)))
     //if there are validation errors, we should get the list of validation messages
     assert(
-      PartValidator.validate(Map("name" -> "bobitty boop", "shape" -> "trapezoid", "quality" -> "wat")) ===
+      PartValidator.validate(Map("name" -> "bit and a bob", "shape" -> "trapezoid", "quality" -> "wat")) ===
         Left(Seq(
-          "name must not contain whitespace, was 'bobitty boop'",
-          "shape was 'trapezoid', but expected one of Triangle, Circle, Square",
+          "name must not contain whitespace, was 'bit and a bob'",
+          "shape was 'trapezoid', expected one of Triangle, Circle, Square",
           "quality must be a number, was 'wat'")))
   }
 
