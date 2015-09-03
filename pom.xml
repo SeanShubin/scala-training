@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.seanshubin</groupId>
     <artifactId>scala-training</artifactId>
@@ -30,7 +29,7 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
-                <version>9.3.2.v20150730</version>
+                <version>9.3.3.v20150827</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
