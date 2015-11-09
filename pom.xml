@@ -29,12 +29,12 @@
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-server</artifactId>
-                <version>9.3.4.v20151007</version>
+                <version>9.3.5.v20151012</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpcore</artifactId>
-                <version>4.4.3</version>
+                <version>4.4.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
