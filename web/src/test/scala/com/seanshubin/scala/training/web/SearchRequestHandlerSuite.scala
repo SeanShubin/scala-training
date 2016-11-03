@@ -2,7 +2,7 @@ package com.seanshubin.scala.training.web
 
 import com.seanshubin.scala.training.core.Searcher
 import com.seanshubin.scala.training.web.exception_info.ExceptionInfo
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 import org.scalatest.{BeforeAndAfter, FunSuite}
 
 class SearchRequestHandlerSuite extends FunSuite with EasyMockSugar with BeforeAndAfter {

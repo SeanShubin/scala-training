@@ -2,7 +2,7 @@ package com.seanshubin.scala.training.core.unit_tests
 
 import com.seanshubin.scala.training.core._
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class ImporterSuite extends FunSuite with EasyMockSugar {
   test("load lines") {

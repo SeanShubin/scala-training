@@ -3,7 +3,7 @@ package com.seanshubin.scala.training.core.unit_tests
 import com.seanshubin.scala.training.core.file_system.FileSystem
 import com.seanshubin.scala.training.core.{DataLoader, DataLoaderImpl, Importer}
 import org.scalatest.FunSuite
-import org.scalatest.mock.EasyMockSugar
+import org.scalatest.easymock.EasyMockSugar
 
 class DataLoaderSuite extends FunSuite with EasyMockSugar {
   test("load lines") {
