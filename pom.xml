@@ -39,7 +39,7 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.4</version>
+                <version>4.5.5</version>
             </dependency>
             <dependency>
                 <groupId>org.easymock</groupId>
@@ -50,7 +50,7 @@
             <dependency>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest_2.12</artifactId>
-                <version>3.0.4</version>
+                <version>3.0.5</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
